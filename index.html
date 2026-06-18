@@ -2,72 +2,56 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VU Meters</title>
 <style>
-  /* Compatible with old Chrome (~v76, end-of-life Chromeboxes):
-     no clamp()/min()/max(), no aspect-ratio, no flex gap, no inset shorthand,
-     no optional chaining, and SVG colors set via CSS classes (not var() in attributes). */
-  :root{
-    --cabinet-0:#0b0a08; --cabinet-1:#171310; --cabinet-hi:#221b14;
-    --brass-hi:#d8b25e; --brass-lo:#5f4a22; --hud:#cdb98f;
-  }
-  body[data-theme="amber"]{
-    --face-hi:#f3ead2; --face-lo:#e3d4b2;
-    --ink:#1a1510; --oxblood:#9a1f17; --label:#5a4a30;
-    --glow:rgba(242,178,74,.40);
-  }
-  body[data-theme="blue"]{
-    --face-hi:#0e1722; --face-lo:#05090f;
-    --ink:#d6ecff; --oxblood:#ff5a4d; --label:#6f93b8;
-    --glow:rgba(64,156,255,.60);
-    --brass-hi:#c2ccd6; --brass-lo:#39434d; --cabinet-hi:#10161e;
-  }
+  /* Hardened for Chrome 53 (2016): no CSS variables, no clamp/min/max,
+     no aspect-ratio, no flex gap, no inset shorthand, no async/await,
+     no optional chaining. Colors baked in; themes via duplicated rules. */
   *{box-sizing:border-box}
   html,body{height:100%}
   body{
-    margin:0;
-    background:radial-gradient(120% 90% at 50% -10%, var(--cabinet-hi) 0%, var(--cabinet-1) 45%, var(--cabinet-0) 100%);
-    color:var(--hud);
+    margin:0;color:#cdb98f;
     font-family:"Futura","Avenir Next","Helvetica Neue",Arial,sans-serif;
-    -webkit-font-smoothing:antialiased; overflow:hidden;
-    display:flex; flex-direction:column;
+    -webkit-font-smoothing:antialiased;overflow:hidden;
+    display:flex;flex-direction:column;
   }
   #stage{flex:1;display:flex;align-items:center;justify-content:center;padding:2vw}
-  .meter{
-    position:relative;width:44vw;height:31vw;margin:0 1vw;
-    border-radius:14px;padding:1.2vw;
-    background:linear-gradient(145deg,var(--brass-hi),var(--brass-lo));
-    box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 -2px 6px rgba(0,0,0,.5) inset,0 18px 40px rgba(0,0,0,.6),0 2px 4px rgba(0,0,0,.5);
-  }
-  .glass{
-    position:relative;height:100%;border-radius:8px;overflow:hidden;
-    background:radial-gradient(130% 120% at 50% 8%, var(--face-hi) 0%, var(--face-lo) 78%, #cdb98e 100%);
-    box-shadow:0 0 0 1px rgba(0,0,0,.35) inset,0 4px 18px rgba(0,0,0,.35) inset;
-  }
-  .lamp{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;
-    background:radial-gradient(80% 60% at 50% 92%, var(--glow), transparent 70%);opacity:.8}
-  body[data-theme="amber"] .lamp{mix-blend-mode:multiply}
-  body[data-theme="blue"]  .lamp{mix-blend-mode:screen}
+  .meter{position:relative;width:44vw;height:31vw;margin:0 1vw;border-radius:14px;padding:1.2vw;
+    box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 -2px 6px rgba(0,0,0,.5) inset,0 18px 40px rgba(0,0,0,.6),0 2px 4px rgba(0,0,0,.5)}
+  .glass{position:relative;height:100%;border-radius:8px;overflow:hidden;
+    box-shadow:0 0 0 1px rgba(0,0,0,.35) inset,0 4px 18px rgba(0,0,0,.35) inset}
+  .lamp{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;opacity:.8}
   .sheen{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;border-radius:8px;
     background:linear-gradient(135deg, rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 28%)}
   svg{display:block;width:100%;height:100%;position:relative}
+  .chan{position:absolute;left:0;right:0;bottom:7%;text-align:center;font-size:13px;letter-spacing:.42em;font-weight:600}
 
-  /* SVG colors via CSS so the theme variables resolve (and recolor on toggle) */
-  .ink-s{stroke:var(--ink)} .ink-f{fill:var(--ink)}
-  .red-s{stroke:var(--oxblood)} .red-f{fill:var(--oxblood)}
-  .brass-s{stroke:var(--brass-hi)} .brass-f{fill:var(--brass-hi)}
+  /* ---------- AMBER (default) ---------- */
+  body[data-theme="amber"]{background:radial-gradient(120% 90% at 50% -10%, #221b14 0%, #171310 45%, #0b0a08 100%)}
+  body[data-theme="amber"] .meter{background:linear-gradient(145deg,#d8b25e,#5f4a22)}
+  body[data-theme="amber"] .glass{background:radial-gradient(130% 120% at 50% 8%, #f3ead2 0%, #e3d4b2 78%, #cdb98e 100%)}
+  body[data-theme="amber"] .lamp{background:radial-gradient(80% 60% at 50% 92%, rgba(242,178,74,.40), transparent 70%);mix-blend-mode:multiply}
+  body[data-theme="amber"] .chan{color:#5a4a30}
+  body[data-theme="amber"] .ink-s{stroke:#1a1510} body[data-theme="amber"] .ink-f{fill:#1a1510}
+  body[data-theme="amber"] .red-s{stroke:#9a1f17} body[data-theme="amber"] .red-f{fill:#9a1f17}
+  body[data-theme="amber"] .brass-s{stroke:#d8b25e} body[data-theme="amber"] .brass-f{fill:#d8b25e}
 
-  .chan{position:absolute;left:0;right:0;bottom:7%;text-align:center;
-    font-size:13px;letter-spacing:.42em;color:var(--label);font-weight:600}
+  /* ---------- McINTOSH BLUE ---------- */
+  body[data-theme="blue"]{background:radial-gradient(120% 90% at 50% -10%, #10161e 0%, #141a20 45%, #07090c 100%)}
+  body[data-theme="blue"] .meter{background:linear-gradient(145deg,#c2ccd6,#39434d)}
+  body[data-theme="blue"] .glass{background:radial-gradient(130% 120% at 50% 8%, #0e1722 0%, #05090f 78%, #04070b 100%)}
+  body[data-theme="blue"] .lamp{background:radial-gradient(80% 60% at 50% 92%, rgba(64,156,255,.60), transparent 70%);mix-blend-mode:screen}
+  body[data-theme="blue"] .chan{color:#6f93b8}
+  body[data-theme="blue"] .ink-s{stroke:#d6ecff} body[data-theme="blue"] .ink-f{fill:#d6ecff}
+  body[data-theme="blue"] .red-s{stroke:#ff5a4d} body[data-theme="blue"] .red-f{fill:#ff5a4d}
+  body[data-theme="blue"] .brass-s{stroke:#c2ccd6} body[data-theme="blue"] .brass-f{fill:#c2ccd6}
 
-  #bar{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;
-    padding:14px 18px;background:rgba(0,0,0,.35);border-top:1px solid rgba(255,255,255,.05);
-    transition:opacity .6s;font-size:13px}
+  #bar{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;padding:14px 18px;
+    background:rgba(0,0,0,.35);border-top:1px solid rgba(255,255,255,.05);transition:opacity .6s;font-size:13px}
   #bar.dim{opacity:0;pointer-events:none}
   #bar > *{margin:5px 9px}
-  button{font:inherit;color:var(--hud);background:#241d15;cursor:pointer;
-    border:1px solid #3a2f20;border-radius:8px;padding:9px 16px;letter-spacing:.04em}
+  button{font:inherit;color:#cdb98f;background:#241d15;cursor:pointer;border:1px solid #3a2f20;border-radius:8px;padding:9px 16px;letter-spacing:.04em}
   button:hover{background:#2e251a}
   button:focus{outline:2px solid #f2b24a;outline-offset:2px}
   .field{display:flex;align-items:center;white-space:nowrap}
@@ -85,8 +69,8 @@
     <button id="full">Fullscreen</button>
     <span class="field">
       <label for="sens">Sensitivity</label>
-      <input id="sens" type="range" min="-24" max="36" step="1" value="6">
-      <span id="sensval">+6 dB</span>
+      <input id="sens" type="range" min="-24" max="60" step="1" value="20">
+      <span id="sensval">+20 dB</span>
     </span>
     <span class="field"><label><input id="peak" type="checkbox" checked> Peak hold</label></span>
     <span id="status">Tap “Start metering,” then allow the microphone.</span>
@@ -110,14 +94,12 @@
     return "M "+p0[0].toFixed(1)+" "+p0[1].toFixed(1)+" A "+r+" "+r+" 0 0 1 "+p1[0].toFixed(1)+" "+p1[1].toFixed(1);
   }
   function buildFace(label){
-    var ticks="",i,tk,ang,inp,outp,lp,red,cls;
+    var ticks="",i,tk,ang,inp,outp,lp,red;
     for(i=0;i<TICKS.length;i++){
-      tk=TICKS[i]; ang=tToAngle(tk.t);
-      red=tk.t>=RED_START-0.001;
+      tk=TICKS[i]; ang=tToAngle(tk.t); red=tk.t>=RED_START-0.001;
       inp=polar(PIVOT.x,PIVOT.y,ARC_R-(tk.big?16:10),ang);
       outp=polar(PIVOT.x,PIVOT.y,ARC_R,ang);
-      cls=red?"red-s":"ink-s";
-      ticks+='<line class="'+cls+'" x1="'+inp[0].toFixed(1)+'" y1="'+inp[1].toFixed(1)+'" x2="'+outp[0].toFixed(1)+'" y2="'+outp[1].toFixed(1)+'" stroke-width="'+(tk.big?2.4:1.4)+'" stroke-linecap="round"/>';
+      ticks+='<line class="'+(red?"red-s":"ink-s")+'" x1="'+inp[0].toFixed(1)+'" y1="'+inp[1].toFixed(1)+'" x2="'+outp[0].toFixed(1)+'" y2="'+outp[1].toFixed(1)+'" stroke-width="'+(tk.big?2.4:1.4)+'" stroke-linecap="round"/>';
       lp=polar(PIVOT.x,PIVOT.y,ARC_R-(tk.big?30:24),ang);
       ticks+='<text class="'+(red?"red-f":"ink-f")+'" x="'+lp[0].toFixed(1)+'" y="'+lp[1].toFixed(1)+'" text-anchor="middle" dominant-baseline="middle" font-size="'+(tk.big?15:11)+'" font-weight="600">'+tk.v+'</text>';
     }
@@ -137,8 +119,7 @@
 
   var stage=document.getElementById("stage");
   function makeMeter(label){
-    var wrap=document.createElement("div");
-    wrap.className="meter";
+    var wrap=document.createElement("div"); wrap.className="meter";
     wrap.innerHTML='<div class="glass">'+buildFace(label)+'<div class="lamp"></div><div class="sheen"></div><div class="chan">'+label+'</div></div>';
     stage.appendChild(wrap);
     return {needle:wrap.querySelector(".needle"),peak:wrap.querySelector(".peak"),angle:A_MIN,vel:0,peakAngle:A_MIN};
@@ -151,32 +132,37 @@
   function setStatus(msg,err){statusEl.textContent=msg;statusEl.className=err?"err":"";}
   sens.addEventListener("input",function(){sensVal.textContent=(sens.value>=0?"+":"")+sens.value+" dB";});
 
+  function getUM(c,ok,fail){
+    if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){navigator.mediaDevices.getUserMedia(c).then(ok).catch(fail);return;}
+    var legacy=navigator.getUserMedia||navigator.webkitGetUserMedia||navigator.mozGetUserMedia;
+    if(legacy){legacy.call(navigator,c,ok,fail);return;}
+    fail(new Error("getUserMedia not supported in this browser"));
+  }
+
   function start(){
     if(running)return;
-    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
-      setStatus("This browser is too old for microphone capture (needs a newer Chrome).",true);return;
-    }
-    var constraints={audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false,channelCount:2},video:false};
-    navigator.mediaDevices.getUserMedia(constraints).then(function(stream){
+    getUM({audio:true,video:false},
+    function(stream){
       var AC=window.AudioContext||window.webkitAudioContext;
       ctx=new AC(); if(ctx.resume){ctx.resume();}
       var src=ctx.createMediaStreamSource(stream);
       var tr=stream.getAudioTracks()[0];
-      var settings=tr.getSettings?tr.getSettings():{};
+      var settings=(tr&&tr.getSettings)?tr.getSettings():{};
       mono=(settings.channelCount||1)<2;
       var splitter=ctx.createChannelSplitter(2);
       src.connect(splitter);
       for(var i=0;i<2;i++){
         var an=ctx.createAnalyser(); an.fftSize=1024; an.smoothingTimeConstant=0;
         splitter.connect(an,mono?0:i);
-        analysers[i]=an; buffers[i]=new Float32Array(an.fftSize);
+        analysers[i]=an; buffers[i]=new Uint8Array(an.fftSize);
       }
       running=true;
-      setStatus(mono?"Running — input is MONO, both meters track the same signal. Use a stereo line-in for true L/R."
+      setStatus(mono?"Running — input is MONO, both meters track the same signal."
                     :"Running — set Sensitivity so loud passages just kiss 0 VU.",false);
       document.getElementById("start").textContent="Metering…";
       last=now(); loop();
-    }).catch(function(e){ setStatus("No microphone access: "+e.message,true); });
+    },
+    function(e){ setStatus("No microphone access: "+(e&&e.message?e.message:e),true); });
   }
 
   var STIFF=230,DAMP=26;
@@ -189,8 +175,8 @@
   function loop(){
     var n=now(),dt=(n-last)/1000; last=n; if(dt>0.05)dt=0.05;
     for(var i=0;i<2;i++){
-      analysers[i].getFloatTimeDomainData(buffers[i]);
-      var b=buffers[i],sum=0,k; for(k=0;k<b.length;k++){sum+=b[k]*b[k];}
+      analysers[i].getByteTimeDomainData(buffers[i]);
+      var b=buffers[i],sum=0,k,v; for(k=0;k<b.length;k++){v=(b[k]-128)/128;sum+=v*v;}
       var rms=Math.sqrt(sum/b.length),target=rmsToAngle(rms),m=meters[i];
       var acc=STIFF*(target-m.angle)-DAMP*m.vel;
       m.vel+=acc*dt; m.angle+=m.vel*dt;
@@ -215,7 +201,8 @@
   });
   document.getElementById("full").addEventListener("click",function(){
     var el=document.documentElement;
-    if(!document.fullscreenElement){ if(el.requestFullscreen){el.requestFullscreen();} else if(el.webkitRequestFullscreen){el.webkitRequestFullscreen();} }
+    var fsEl=document.fullscreenElement||document.webkitFullscreenElement;
+    if(!fsEl){ if(el.requestFullscreen){el.requestFullscreen();} else if(el.webkitRequestFullscreen){el.webkitRequestFullscreen();} }
     else { if(document.exitFullscreen){document.exitFullscreen();} else if(document.webkitExitFullscreen){document.webkitExitFullscreen();} }
   });
 
